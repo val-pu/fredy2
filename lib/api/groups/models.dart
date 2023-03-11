@@ -13,3 +13,13 @@ class Group{
 
   factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
 }
+
+@JsonSerializable()
+class CreateGroup{
+  final String name, description;
+
+  CreateGroup({required this.name, required this.description});
+
+  Map<String, dynamic> toJson() => _$CreateGroupToJson(this);
+
+}
