@@ -54,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
         appBar: AppBar(
           title: const Text("Login"),
         ),
+        backgroundColor: theme.colorScheme.background,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

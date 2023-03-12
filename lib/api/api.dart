@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String apiUrl = "localhost:8080";
+const String apiUrl = "192.168.178.29:8080";
 
 Uri Function(String, String, [Map<String, dynamic> queryParameters])
     httpMethod = Uri.http;

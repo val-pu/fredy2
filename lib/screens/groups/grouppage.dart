@@ -19,6 +19,7 @@ class _GroupPageState extends State<GroupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: Text(widget.groupName),
       ),
@@ -33,7 +34,7 @@ class _GroupPageState extends State<GroupPage> {
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 80),
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                    color: Colors.amber,
+                    color: Theme.of(context).colorScheme.primary,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5),

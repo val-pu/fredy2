@@ -20,6 +20,11 @@ class MyApp extends StatelessWidget {
       title: 'Fredy',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        colorScheme: const ColorScheme.dark(
+          primary: Colors.blue,
+          secondary: Colors.yellow,
+          background: Colors.white10
+        ),
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
