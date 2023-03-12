@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fredy2/groups/grouppage.dart';
+import 'package:fredy2/screens/groups/grouppage.dart';
 
 class LandingPage extends StatefulWidget {
   LandingPage({super.key}) {

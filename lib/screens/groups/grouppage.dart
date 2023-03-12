@@ -30,7 +30,7 @@ class _GroupPageState extends State<GroupPage> {
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 100),
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 80),
               child: DecoratedBox(
                 decoration: BoxDecoration(
                     color: Colors.amber,

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fredy2/landingpage.dart';
+import 'package:fredy2/api/auth/models.dart';
+import 'package:fredy2/screens/landingpage.dart';
+import 'package:fredy2/screens/groups/grouppage.dart';
+import 'package:fredy2/screens/login/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'api/auth/auth.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,52 +41,26 @@ class _MyHomePageState extends State<MyHomePage> {
         .push(MaterialPageRoute(builder: (context) => LandingPage()));
   }
 
+  Future<bool> loadStartup() async {
+    String? accessToken =
+        (await SharedPreferences.getInstance()).getString("access_token");
+    return accessToken != null;
+  }
+
   @override
   Widget build(BuildContext context) {
     double _paddingEditText = 0.0;
-    ThemeData theme = Theme.of(context);
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Login',
-                style: theme.textTheme.displayLarge,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * .3),
-                child: Column(children: <Widget>[
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: "Nutzername *",
-                      icon: Icon(Icons.account_circle_outlined),
-                    ),
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: "Password *",
-                      icon: Icon(Icons.password_rounded),
-                    ),
-                    obscureText: true,
-                  ),
-                  ButtonBar(
-                    alignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                          onPressed: onLogin, child: const Text('Login')),
-                      TextButton(
-                          onPressed: onLogin, child: const Text('Register')),
-                    ],
-                  )
-                ]),
-              )
-            ],
-          ),
-        ));
+
+    return FutureBuilder<bool>(
+        future: loadStartup(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (!snapshot.hasData) {
+            return const CircularProgressIndicator();
+          }
+          if (snapshot.data ?? false) {
+            return GroupPage(groupId: "abc");
+          }
+          return const LoginPage();
+        });
   }
 }
