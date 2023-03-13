@@ -23,7 +23,9 @@ Future<LoginModel> refresh(String refreshToken) async {
   Map<String, String> body = {"refresh_token": refreshToken};
   Response resp = await http.post(httpMethod(apiUrl, "auth/refresh"),
       body: jsonEncode(body), headers: requestHeader);
-
+  if(resp.statusCode != 200){
+    return Future.error("Failed");
+  }
   return LoginModel.fromJson(jsonDecode(resp.body));
 }
 
@@ -42,4 +44,9 @@ Future<void> register(String mail, String password, String username) async {
   return Future.error("Bad request");
 }
 
-void main() async {}
+Future<void> validate() async {
+  final resp = await getAuthenticated("auth/validate");
+  if (resp.statusCode != 200){
+    return Future.error("Fail");
+  }
+}

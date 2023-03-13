@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fredy2/screens/landingpage.dart';
-import 'package:fredy2/screens/groups/grouppage.dart';
 import 'package:fredy2/screens/login/login.dart';
+import 'package:fredy2/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fredy2/api/auth/auth.dart' as auth;
 
 void main() {
   runApp(const MyApp());
@@ -18,53 +19,76 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         colorScheme: const ColorScheme.dark(
-          primary: Colors.blue,
-          secondary: Colors.yellow,
-          background: Colors.white10
-        ),
+            primary: Colors.blue,
+            secondary: Colors.yellow,
+            background: Colors.white10),
       ),
       routes: {
-        "/": (context) => LandingPage(),
+        "/": (context) => const MyHomePage(),
         "/login": (context) => const LoginPage(),
+        "/landing": (context) => LandingPage()
       },
-      initialRoute: "/login",
+      initialRoute: "/",
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key}) : super(key: key);
 
-  final String title;
+  Future<bool> loadStartup() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString("access_token");
+    if (accessToken == null) {
+      return false;
+    }
+    String? dtString = prefs.getString("access_token_expires");
+    String? refreshToken = prefs.getString("refresh_token");
+
+    if (dtString == null && refreshToken == null) {
+      return false;
+    }
+
+    if (dtString == null ||
+        DateTime.now().difference(DateTime.parse(dtString)) <
+            const Duration(hours: 1)) {
+      if (refreshToken == null) {
+        return false;
+      }
+      var loginModel = await auth.refresh(refreshToken);
+      saveLoginCreds(loginModel);
+    }
+    return true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    loadStartup()
+        .then((value) => {
+              if (value == true)
+                {Navigator.pushReplacementNamed(context, "/landing")}
+              else
+                {Navigator.pushReplacementNamed(context, "/login")}
+            })
+        .catchError(() => Navigator.pushReplacementNamed(context, "/login"));
+    return const Center(child: CircularProgressIndicator());
+  }
+}
+
+/*
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void onLogin() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => LandingPage()));
-  }
-
-  Future<bool> loadStartup() async {
-    String? accessToken =
-        (await SharedPreferences.getInstance()).getString("access_token");
-    return accessToken != null;
-  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-        future: loadStartup(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
-          }
-          if (snapshot.data ?? false) {
-            return GroupPage(groupId: "abc");
-          }
-          return const LoginPage();
-        });
+    return const CircularProgressIndicator();
   }
 }
+*/

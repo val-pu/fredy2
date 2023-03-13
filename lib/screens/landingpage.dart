@@ -3,7 +3,7 @@ import 'package:fredy2/screens/groups/grouppage.dart';
 
 class LandingPage extends StatefulWidget {
   LandingPage({super.key}) {
-    groups.add(GroupItem("Test", "name", "description"));
+    groups.add(GroupItem("Test", "name1", "description"));
   }
 
   final groups = <GroupItem>[GroupItem("id", "name", "description")];
@@ -16,9 +16,6 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   void startGroupActivity(String id) {
-    var s = const SnackBar(
-      content: Text("Landing Page"),
-    );
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => GroupPage(groupId: id)));
   }

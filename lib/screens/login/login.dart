@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fredy2/api/auth/auth.dart' as auth;
 import 'package:fredy2/api/auth/models.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fredy2/utils/utils.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -31,17 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> login() async {
     LoginModel loginModel =
         await auth.login(_mailController.text, _pwController.text);
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    prefs.setString("access_token", loginModel.accessToken);
-    prefs.setString("refresh_token", loginModel.refreshToken);
-    prefs.setString("username", loginModel.username);
-    prefs.setString("access_token_expires",
-        loginModel.accessTokenExpires.toIso8601String());
-    prefs.setString("refresh_token_expires",
-        loginModel.refreshTokenExpires.toIso8601String());
-    prefs.setString("user_id", loginModel.userId);
+    saveLoginCreds(loginModel);
   }
 
   @override
@@ -105,6 +95,6 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         ));
-    
+
   }
 }
