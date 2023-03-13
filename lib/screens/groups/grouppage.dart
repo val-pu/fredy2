@@ -54,7 +54,23 @@ class _GroupPageState extends State<GroupPage> {
                         Icon(Icons.chevron_right)
                       ]),
                 ),
-              ))
+              )),
+          ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, i) {
+                return Column(
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: const [Text("Eventname")],
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Text("MO"),
+                    )
+                  ],
+                );
+              })
         ],
       ),
     );
