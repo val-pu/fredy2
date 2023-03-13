@@ -14,32 +14,9 @@ class LandingPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Groups"),
         actions: [
-          PopupMenuButton(
-              itemBuilder: (context) {
-                return [
-                  const PopupMenuItem<int>(
-                    value: 0,
-                    child: Text("My Account"),
-                  ),
-                  const PopupMenuItem<int>(
-                    value: 1,
-                    child: Text("Settings"),
-                  ),
-                  const PopupMenuItem<int>(
-                    value: 2,
-                    child: Text("Logout"),
-                  ),
-                ];
-              },
-              onSelected: (value) {
-                if (value == 0) {
-                  print("My account menu is selected.");
-                } else if (value == 1) {
-                  print("Settings menu is selected.");
-                } else if (value == 2) {
-                  print("Logout menu is selected.");
-                }
-              }),
+          IconButton(onPressed: (){
+            Navigator.pushNamed(context, "/settings");
+          }, icon: const Icon(Icons.settings)),
         ],
       ),
       body: FutureBuilder<List<Group>>(
@@ -73,17 +50,17 @@ class LandingPage extends StatelessWidget {
         },
       ),
       floatingActionButton: SpeedDial(
-        child: const Icon(Icons.add),
         children: [
           SpeedDialChild(
-              child: Icon(Icons.login),
+              child: const Icon(Icons.login),
               label: "Join",
               onTap: (){
                 Navigator.pushNamed(context, "/join");
               }
           ),
-          SpeedDialChild(child: Icon(Icons.add))
+          SpeedDialChild(child: const Icon(Icons.add))
         ],
+        child: const Icon(Icons.add),
       ),
     );
   }

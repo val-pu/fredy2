@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fredy2/screens/join_group.dart';
 import 'package:fredy2/screens/landingpage.dart';
 import 'package:fredy2/screens/login/login.dart';
+import 'package:fredy2/screens/settings.dart';
 import 'package:fredy2/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fredy2/api/auth/auth.dart' as auth;
@@ -21,13 +22,15 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         colorScheme: const ColorScheme.dark(
             primary: Colors.blue,
+            error: Colors.red,
             background: Colors.white10),
       ),
       routes: {
         "/": (context) => const MyHomePage(),
         "/login": (context) => const LoginPage(),
-        "/landing": (context) => LandingPage(),
-        "/join" :(context) => JoinGroupPage()
+        "/landing": (context) => const LandingPage(),
+        "/join": (context) => const JoinGroupPage(),
+        "/settings": (context) => const Settings(),
       },
       initialRoute: "/",
     );
