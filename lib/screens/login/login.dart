@@ -1,6 +1,3 @@
-
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:fredy2/api/auth/auth.dart' as auth;
 import 'package:fredy2/api/auth/models.dart';
@@ -23,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
     _mailController = TextEditingController();
     _pwController = TextEditingController();
   }
+
   @override
   void dispose() {
     _mailController.dispose();
@@ -30,21 +28,20 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void login() async {
-    LoginModel loginModel;
-    try {
-      loginModel = await auth.login(
-          _mailController.text, _pwController.text);
-    } catch(e) {
-      // Show error
-      return;
-    }
+  Future<void> login() async {
+    LoginModel loginModel =
+        await auth.login(_mailController.text, _pwController.text);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     prefs.setString("access_token", loginModel.accessToken);
     prefs.setString("refresh_token", loginModel.refreshToken);
     prefs.setString("username", loginModel.username);
+    prefs.setString("access_token_expires",
+        loginModel.accessTokenExpires.toIso8601String());
+    prefs.setString("refresh_token_expires",
+        loginModel.refreshTokenExpires.toIso8601String());
+    prefs.setString("user_id", loginModel.userId);
   }
 
   @override
@@ -86,7 +83,19 @@ class _LoginPageState extends State<LoginPage> {
                     alignment: MainAxisAlignment.center,
                     children: [
                       TextButton(
-                          onPressed: login, child: const Text('Login')),
+                          onPressed: () => {
+                                login()
+                                    .then((value) =>
+                                        Navigator.pushReplacementNamed(
+                                            context, "/"))
+                                    .catchError((err) =>
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(err.toString()),
+                                          backgroundColor: Colors.red,
+                                        )))
+                              },
+                          child: const Text('Login')),
                       const TextButton(
                           onPressed: null, child: Text('Register')),
                     ],
@@ -95,6 +104,7 @@ class _LoginPageState extends State<LoginPage> {
               )
             ],
           ),
-        ));;
+        ));
+    
   }
 }

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fredy2/api/auth/models.dart';
 import 'package:fredy2/screens/landingpage.dart';
 import 'package:fredy2/screens/groups/grouppage.dart';
 import 'package:fredy2/screens/login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'api/auth/auth.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +11,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,7 +23,11 @@ class MyApp extends StatelessWidget {
           background: Colors.white10
         ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        "/": (context) => LandingPage(),
+        "/login": (context) => const LoginPage(),
+      },
+      initialRoute: "/login",
     );
   }
 }
@@ -54,8 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    double _paddingEditText = 0.0;
-
     return FutureBuilder<bool>(
         future: loadStartup(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
