@@ -9,8 +9,7 @@ Future<List<Group>> getGroups() async {
   if (resp.statusCode != 200) {
     return Future.error(ErrorResponse.fromJson(jsonDecode(resp.body)).error);
   }
-
-  List<Map<String, dynamic>> groups = jsonDecode(resp.body)["groups"];
+  List<dynamic> groups = jsonDecode(resp.body)["groups"];
   return groups.map((e) => Group.fromJson(e)).toList();
 }
 

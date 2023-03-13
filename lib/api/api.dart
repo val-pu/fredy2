@@ -27,12 +27,9 @@ Future<http.Response> getAuthenticated(String path) async {
   if (accessToken == null) {
     return Future.error("Unauthenticated");
   }
-  var headers = requestHeader;
+  Map<String, String> headers = {...requestHeader};
   headers["Authorization"] = accessToken;
-
-  http.Response resp =
-      await http.get(httpMethod(apiUrl, path), headers: headers);
-  return resp;
+  return await http.get(httpMethod(apiUrl, path), headers: headers);
 }
 
 Future<http.Response> post(Object? data, path) async {

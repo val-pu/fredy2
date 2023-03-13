@@ -1,20 +1,90 @@
 import 'package:flutter/material.dart';
 import 'package:fredy2/screens/groups/grouppage.dart';
+import 'package:fredy2/api/groups/groups.dart' as groups;
 
-class LandingPage extends StatefulWidget {
-  LandingPage({super.key}) {
-    groups.add(GroupItem("Test", "name1", "description"));
-  }
+import '../api/groups/models.dart';
 
-  final groups = <GroupItem>[GroupItem("id", "name", "description")];
+class LandingPage extends StatelessWidget {
+  const LandingPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return _LandingPageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Groups"),
+        actions: [
+          PopupMenuButton(
+              itemBuilder: (context) {
+                return [
+                  const PopupMenuItem<int>(
+                    value: 0,
+                    child: Text("My Account"),
+                  ),
+                  const PopupMenuItem<int>(
+                    value: 1,
+                    child: Text("Settings"),
+                  ),
+                  const PopupMenuItem<int>(
+                    value: 2,
+                    child: Text("Logout"),
+                  ),
+                ];
+              },
+              onSelected: (value) {
+                if (value == 0) {
+                  print("My account menu is selected.");
+                } else if (value == 1) {
+                  print("Settings menu is selected.");
+                } else if (value == 2) {
+                  print("Logout menu is selected.");
+                }
+              }),
+        ],
+      ),
+      body: FutureBuilder<List<Group>>(
+        future: groups.getGroups(),
+        builder: (context, snapshot) {
+          if(snapshot.hasError){
+            return Text(snapshot.error.toString());
+          }
+          if (!snapshot.hasData){
+            return const Center(child: CircularProgressIndicator());
+          }
+          var data = snapshot.data;
+          if(data == null){
+            return const Text("Dieser Text sollte nie zu sehen sein");
+          }
+          if(data.isEmpty){
+            return const Text("Du bist in keiner Gruppe");
+          }
+          return ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (context, i) {
+              return ListTile(
+                title: Text(data[i].name),
+                onTap: () {
+                  Navigator.pushNamed(context, "/group/");
+                },
+                subtitle: Text(data[i].description),
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 }
 
-class _LandingPageState extends State<LandingPage> {
+class LandingPage_ extends StatefulWidget {
+  LandingPage_({super.key}) {}
+
+  @override
+  State<StatefulWidget> createState() {
+    return _LandingPageState_();
+  }
+}
+
+class _LandingPageState_ extends State<LandingPage_> {
   void startGroupActivity(String id) {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => GroupPage(groupId: id)));
@@ -25,27 +95,47 @@ class _LandingPageState extends State<LandingPage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("a"),
+          actions: [
+            PopupMenuButton(
+                icon: Icon(Icons.book),
+                itemBuilder: (context) {
+                  return [
+                    const PopupMenuItem<int>(
+                      value: 0,
+                      child: Text("My Account"),
+                    ),
+                    const PopupMenuItem<int>(
+                      value: 1,
+                      child: Text("Settings"),
+                    ),
+                    const PopupMenuItem<int>(
+                      value: 2,
+                      child: Text("Logout"),
+                    ),
+                  ];
+                },
+                onSelected: (value) {
+                  if (value == 0) {
+                    print("My account menu is selected.");
+                  } else if (value == 1) {
+                    print("Settings menu is selected.");
+                  } else if (value == 2) {
+                    print("Logout menu is selected.");
+                  }
+                }),
+          ],
         ),
         body: ListView.builder(
-          itemCount: widget.groups.length,
+          itemCount: 1,
           itemBuilder: (context, i) {
-            var currentGroup = widget.groups[i];
             return ListTile(
-              title: Text(currentGroup.name),
+              title: const Text(""),
               onTap: () {
-                startGroupActivity(currentGroup.id);
+                startGroupActivity("");
               },
-              subtitle: Text(currentGroup.description),
+              subtitle: Text(""),
             );
           },
         ));
   }
-}
-
-class GroupItem {
-  final String id;
-  final String name;
-  final String description;
-
-  GroupItem(this.id, this.name, this.description);
 }
