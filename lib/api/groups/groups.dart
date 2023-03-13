@@ -21,8 +21,8 @@ Future<void> createGroup(String name, String description) async {
   }
 }
 
-Future<void> joinGroup(String groupId)async {
-  final resp = await postAuthenticated(null, "groups/$groupId/join");
+Future<void> joinGroup(String invitation)async {
+  final resp = await postAuthenticated(null, "groups/join/$invitation");
   if (resp.statusCode != 200){
     return Future.error(ErrorResponse.fromJson(jsonDecode(resp.body)).error);
   }

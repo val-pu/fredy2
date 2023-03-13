@@ -50,7 +50,7 @@ Future<http.Response> postAuthenticated(Object? data, String path) async {
   if (accessToken == null) {
     return Future.error("Unauthenticated");
   }
-  var headers = requestHeader;
+  var headers = {...requestHeader};
   headers["Authorization"] = accessToken;
 
   return await http.post(

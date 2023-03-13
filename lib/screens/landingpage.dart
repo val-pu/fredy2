@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fredy2/screens/groups/grouppage.dart';
 import 'package:fredy2/api/groups/groups.dart' as groups;
 
@@ -70,6 +71,19 @@ class LandingPage extends StatelessWidget {
             },
           );
         },
+      ),
+      floatingActionButton: SpeedDial(
+        child: const Icon(Icons.add),
+        children: [
+          SpeedDialChild(
+              child: Icon(Icons.login),
+              label: "Join",
+              onTap: (){
+                Navigator.pushNamed(context, "/join");
+              }
+          ),
+          SpeedDialChild(child: Icon(Icons.add))
+        ],
       ),
     );
   }
