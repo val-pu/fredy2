@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fredy2/screens/groups/create_group.dart';
 import 'package:fredy2/screens/groups/grouppage.dart';
-import 'package:fredy2/screens/join_group.dart';
+import 'package:fredy2/screens/groups/join_group.dart';
 import 'package:fredy2/screens/landingpage.dart';
 import 'package:fredy2/screens/login/login.dart';
 import 'package:fredy2/screens/login/register.dart';
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
         "/landing": (context) => const LandingPage(),
         "/join": (context) => const JoinGroupPage(),
         "/settings": (context) => const Settings(),
-        "/group": (context) => const GroupPage()
+        "/group": (context) => const GroupPage(),
+        "/creategroup": (context)=> const CreateGroupPage(),
       },
       initialRoute: "/",
     );

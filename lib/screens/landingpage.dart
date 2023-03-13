@@ -61,7 +61,13 @@ class LandingPage extends StatelessWidget {
                 Navigator.pushNamed(context, "/join");
               }
           ),
-          SpeedDialChild(child: const Icon(Icons.add))
+          SpeedDialChild(
+              child: const Icon(Icons.add),
+              label: "Create",
+              onTap: (){
+                Navigator.pushNamed(context, "/creategroup");
+              }
+          )
         ],
         child: const Icon(Icons.add),
       ),

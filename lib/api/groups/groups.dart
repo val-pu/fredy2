@@ -13,12 +13,13 @@ Future<List<Group>> getGroups() async {
   return groups.map((e) => Group.fromJson(e)).toList();
 }
 
-Future<void> createGroup(String name, String description) async {
+Future<Group> createGroup(String name, String description) async {
   final group = CreateGroup(name: name, description: description).toJson();
   final resp = await postAuthenticated(group, "groups");
   if (resp.statusCode != 201) {
     return Future.error(ErrorResponse.fromJson(jsonDecode(resp.body)).error);
   }
+  return Group.fromJson(jsonDecode(resp.body));
 }
 
 Future<void> joinGroup(String invitation)async {

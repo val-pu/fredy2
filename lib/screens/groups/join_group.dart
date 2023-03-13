@@ -55,8 +55,8 @@ class _JoinGroupPageState extends State<JoinGroupPage> {
                   : () {
                       joinGroup()
                           .then((void x) => {
-                                Navigator.pushReplacementNamed(
-                                    context, "/landing")
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, "/landing", (route)=> false)
                               })
                           .catchError((err) {
                         ScaffoldMessenger.of(context).showSnackBar(
