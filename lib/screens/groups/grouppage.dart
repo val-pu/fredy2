@@ -58,18 +58,25 @@ class _GroupPageState extends State<GroupPage> {
           ListView.builder(
               itemCount: 10,
               itemBuilder: (context, i) {
-                return Column(
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: const [Text("Eventname")],
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Text("MO"),
-                    )
-                  ],
-                );
+                return Container(
+                    color: Colors.amberAccent,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Container(
+                              color: Colors.amber,
+                              child: Text("Eventname"),
+                            )
+                          ],
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Text("MO"),
+                        )
+                      ],
+                    ));
               })
         ],
       ),
