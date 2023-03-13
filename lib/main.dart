@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fredy2/screens/groups/grouppage.dart';
 import 'package:fredy2/screens/join_group.dart';
 import 'package:fredy2/screens/landingpage.dart';
 import 'package:fredy2/screens/login/login.dart';
+import 'package:fredy2/screens/login/register.dart';
 import 'package:fredy2/screens/settings.dart';
 import 'package:fredy2/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,14 +25,16 @@ class MyApp extends StatelessWidget {
         colorScheme: const ColorScheme.dark(
             primary: Colors.blue,
             error: Colors.red,
-            background: Colors.white10),
+        ),
       ),
       routes: {
         "/": (context) => const MyHomePage(),
         "/login": (context) => const LoginPage(),
+        "/register": (context) => const RegisterPage(),
         "/landing": (context) => const LandingPage(),
         "/join": (context) => const JoinGroupPage(),
         "/settings": (context) => const Settings(),
+        "/group": (context) => const GroupPage()
       },
       initialRoute: "/",
     );
@@ -67,14 +71,16 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    loadStartup()
-        .then((value) => {
-              if (value == true)
-                {Navigator.pushReplacementNamed(context, "/landing")}
-              else
-                {Navigator.pushReplacementNamed(context, "/login")}
-            })
-        .catchError(() => Navigator.pushReplacementNamed(context, "/login"));
+    loadStartup().then((value) {
+      String route;
+      if (value == true) {
+        route = "/landing";
+      } else {
+        route = "/login";
+      }
+      Navigator.pushNamedAndRemoveUntil(context, route, (route) => false);
+    }).catchError((err) =>
+        Navigator.pushNamedAndRemoveUntil(context, "/login", (route) => false));
     return const Center(child: CircularProgressIndicator());
   }
 }

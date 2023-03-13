@@ -1,14 +1,20 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:fredy2/widgets/title.dart';
 
-class GroupPage extends StatefulWidget {
-  GroupPage({super.key, required this.groupId});
+class GroupPageArgs {
+  final String uuid;
 
-  String groupId = "";
-  String groupName = "Test";
-  String groupDescription = "Lorem Ipsum";
+  GroupPageArgs(this.uuid);
+}
+
+
+class GroupPage extends StatefulWidget {
+  const GroupPage({super.key});
+
+  final String groupId = "";
+  final String groupName = "Test";
+  final String groupDescription = "Lorem Ipsum";
 
   @override
   State<StatefulWidget> createState() {
@@ -19,6 +25,8 @@ class GroupPage extends StatefulWidget {
 class _GroupPageState extends State<GroupPage> {
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as GroupPageArgs;
+    // TODO use args.uuid to get activities from api
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(

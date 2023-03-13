@@ -23,6 +23,9 @@ class LandingPage extends StatelessWidget {
         future: groups.getGroups(),
         builder: (context, snapshot) {
           if(snapshot.hasError){
+            if (snapshot.error.toString() == "Unauthenticated") {
+              Navigator.pushNamedAndRemoveUntil(context, "/login", (route) => false);
+            }
             return Text(snapshot.error.toString());
           }
           if (!snapshot.hasData){
@@ -41,7 +44,7 @@ class LandingPage extends StatelessWidget {
               return ListTile(
                 title: Text(data[i].name),
                 onTap: () {
-                  Navigator.pushNamed(context, "/group/");
+                  Navigator.pushNamed(context, "/group", arguments: GroupPageArgs(data[i].uuid));
                 },
                 subtitle: Text(data[i].description),
               );
@@ -63,70 +66,5 @@ class LandingPage extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
     );
-  }
-}
-
-class LandingPage_ extends StatefulWidget {
-  LandingPage_({super.key}) {}
-
-  @override
-  State<StatefulWidget> createState() {
-    return _LandingPageState_();
-  }
-}
-
-class _LandingPageState_ extends State<LandingPage_> {
-  void startGroupActivity(String id) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => GroupPage(groupId: id)));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("a"),
-          actions: [
-            PopupMenuButton(
-                icon: Icon(Icons.book),
-                itemBuilder: (context) {
-                  return [
-                    const PopupMenuItem<int>(
-                      value: 0,
-                      child: Text("My Account"),
-                    ),
-                    const PopupMenuItem<int>(
-                      value: 1,
-                      child: Text("Settings"),
-                    ),
-                    const PopupMenuItem<int>(
-                      value: 2,
-                      child: Text("Logout"),
-                    ),
-                  ];
-                },
-                onSelected: (value) {
-                  if (value == 0) {
-                    print("My account menu is selected.");
-                  } else if (value == 1) {
-                    print("Settings menu is selected.");
-                  } else if (value == 2) {
-                    print("Logout menu is selected.");
-                  }
-                }),
-          ],
-        ),
-        body: ListView.builder(
-          itemCount: 1,
-          itemBuilder: (context, i) {
-            return ListTile(
-              title: const Text(""),
-              onTap: () {
-                startGroupActivity("");
-              },
-              subtitle: Text(""),
-            );
-          },
-        ));
   }
 }

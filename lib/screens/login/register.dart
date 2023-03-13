@@ -3,35 +3,44 @@ import 'package:fredy2/api/auth/auth.dart' as auth;
 import 'package:fredy2/api/auth/models.dart';
 import 'package:fredy2/utils/utils.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   late TextEditingController _mailController;
   late TextEditingController _pwController;
+  late TextEditingController _nameController;
 
   @override
   void initState() {
     super.initState();
     _mailController = TextEditingController();
     _pwController = TextEditingController();
+    _nameController = TextEditingController();
   }
 
   @override
   void dispose() {
     _mailController.dispose();
     _pwController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
-  Future<void> login() async {
+  Future<void> register() async {
+    await auth.register(
+        _mailController.text, _pwController.text, _nameController.text);
     LoginModel loginModel =
         await auth.login(_mailController.text, _pwController.text);
     saveLoginCreds(loginModel);
+  }
+
+  void showLoginPage() async {
+    Navigator.pushNamed(context, "/login");
   }
 
   @override
@@ -39,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
     ThemeData theme = Theme.of(context);
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Login"),
+          title: const Text("Register"),
         ),
         backgroundColor: theme.colorScheme.background,
         body: Center(
@@ -47,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Login',
+                'Register',
                 style: theme.textTheme.displayMedium,
               ),
               Padding(
@@ -63,6 +72,13 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   TextFormField(
                     decoration: const InputDecoration(
+                      labelText: "Username *",
+                      icon: Icon(Icons.person),
+                    ),
+                    controller: _nameController,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
                       labelText: "Password *",
                       icon: Icon(Icons.password_rounded),
                     ),
@@ -73,24 +89,21 @@ class _LoginPageState extends State<LoginPage> {
                     alignment: MainAxisAlignment.center,
                     children: [
                       TextButton(
-                          onPressed: () => {
-                                login()
-                                    .then((value) =>
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context, "/", (route) => false))
-                                    .catchError((err) =>
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(err.toString()),
-                                          backgroundColor: Colors.red,
-                                        )))
-                              },
-                          child: const Text('Login')),
+                          onPressed: showLoginPage, child: const Text('Login')),
                       TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, "/register");
-                          },
-                          child: const Text('Register')),
+                        onPressed: () {
+                          register()
+                              .then((value) => {
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, "/landing", (route) => false)
+                                  })
+                              .catchError((error) => {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text(error)))
+                                  });
+                        },
+                        child: const Text('Register'),
+                      ),
                     ],
                   )
                 ]),
